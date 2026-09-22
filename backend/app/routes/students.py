@@ -55,7 +55,12 @@ def list_students(
         query = query.filter(Student.department.ilike(f"%{department}%"))
 
     total = query.count()
-    students = query.offset((page - 1) * page_size).limit(page_size).all()
+    students = (
+        query.order_by(Student.id)
+        .offset((page - 1) * page_size)
+        .limit(page_size)
+        .all()
+    )
 
     return StudentListOut(
         items=[_to_out(s) for s in students],
